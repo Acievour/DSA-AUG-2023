@@ -1,0 +1,147 @@
+primMST primAlgo(graphType graph, int startVertex)
+{
+	primMST newGraph;
+	set visited = {0};
+	visited[startVertex] = 1;
+	newGraph.edgeCount = 0;
+	newGraph.minCost = 0;
+	int x, head, tail, minWeight;
+	
+	for(x = 0; x < MAX; x++) {
+		minWeight = INFINITY;
+		int u = 0;
+		int v = 0;
+		
+		for(head = 0; head < MAX; head++) {
+			if(visited[head]) {
+				for(tail = 0; tail < MAX; tail++) {
+					if(!visited[tail] && graph[head][tail] < minWeight) {
+						minWeight = graph[head][tail];
+						u = head;
+						v = tail;
+					}
+				}
+			}
+		}
+		if(minWeight != INFINITY) {
+			newGraph.edgeCount++;
+			newGraph.minCost += minWeight;
+			newGraph.edges[x].u = u;
+			newGraph.edges[x].v = v;
+			newGraph.edges[x].weight = minWeight;
+			visited[v] = 1;
+ 		}
+	}
+	
+	return newGraph;
+}
+
+void floydWarshall(graphType graph[MAX][MAX], int V)
+{
+	int dist[MAX][MAX], i, j, k;
+	
+	for(i = 0; i < V; i++) {
+		for(j = 0; j < V; j++) {
+			dist[i][j] = graph[i][j];
+		}
+	}
+	
+	for(k = 0; k < V; k++) {
+		for(i = 0; i < V; i++) {
+			for(j = 0; j < V; j++) {
+				if(dist[i][k] + dist[k][j] < dist[i][j]) {
+					dist[i][j] = dist[i][k] + dist[k][j];
+				}
+			}
+		}
+	}
+}
+
+void floyd(int A[][], int C[][]) {
+	int i, j, k;
+	for(i = 0; i < MAX; i++) {
+		for(j = 0; j < MAX; j++) {
+			A[i][j] = C[i][j];
+		}	
+	}
+	
+	for(i = 0; i < MAX; i++) {
+		A[i][i] = 0;
+	}
+	
+	for(k = 0; k < MAX; k++) {
+		for(i = 0; i < MAX; i++) {
+			for(j = 0; j < MAX; j++) {
+				if(A[i][k] + A[k][j] < A[i][j]) {
+					A[i][j] = A[i][k] + A[k][j];
+				}
+			}
+		}
+	}
+}
+
+void warshall(int A[][], int C[][]) {
+	int i, j, k;
+	for(i = 0; i < MAX; i++) {
+		for(j = 0; j < MAX; j++) {
+			A[i][j] = C[i][j];
+		}	
+	}
+	
+	for(k = 0; k < MAX; k++) {
+		for(i = 0; i < MAX; i++) {
+			for(j = 0; j < MAX; j++) {
+				if(A[i][j] == 0) {
+					A[i][j] = (A[i][k] == 0 && A[k][j] == 0) ? 1 : 0;
+				}
+			}
+		}
+	}
+} 
+
+void DFS(Graph main, int startingPoint, set visited) {
+	visited[startingPoint] = 1;
+	List trav;
+	printf("%d ->", startingPoint);
+	for(trav = main.headers[startingPoint]; trav != NULL; trav = trav->link) {
+		if(!visited[trav->vertex]) {
+			DFS(main, trav->vertex, visited);
+		}
+	}
+}
+
+void BFS(Graph C, int V) {
+	Queue Q;
+	ptr trav;
+	int x, mark[MAX];
+	
+	Q.front = 0;
+	Q.back = 0;
+	Q.elem[Q.back] = V;
+	
+	while((Q.back + 1) % MAX != Q.front) {
+		x = Q.elem[Q.front];
+		mark[x] = V;
+		Q.front = (Q.front + 1) % MAX;
+		printf("%d ->", x);
+		
+		for(trav = C[x]; trav != NULL; trav = trav->link) {
+			if(mark[trav->elem] == V) {
+				Q.back = (Q.back + 1) % MAX;
+				Q.elem[Q.back] = trav->elem;
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
